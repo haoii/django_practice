@@ -20,7 +20,7 @@ def index(request):
             'pub_date': post.pub_date
         }
 
-    latest_posts = SquarePost.objects.order_by('-pub_date')[:10]
+    latest_posts = SquarePost.objects.order_by('-pub_date')[:40]
     latest_posts = [post_to_dict(p) for p in latest_posts]
     latest_posts_response = {
         'get_time': timezone.now(),
@@ -38,14 +38,23 @@ def submit_post(request):
     post = SquarePost(user=user, post_text=post_text, image_url='', votes=0, pub_date=timezone.now())
     post.save()
 
-    file_hex = request.FILES.get("files", None)
-    if file_hex:
-        image_url = str(post.id) + '-1.jpg'
-        with open('static/square/post_image/' + image_url, 'wb+') as f:
-            for chunk in file_hex.chunks():
-                f.write(chunk)
+    image_hex_list = []
+    for i in range(3):
+        img = request.FILES.get('image-' + str(i), None)
+        if not img:
+            break
+        image_hex_list.append(img)
 
-        post.image_url = image_url
+    if image_hex_list:
+        all_image_url = ''
+        for i, image_hex in enumerate(image_hex_list):
+            image_url = str(post.id) + '-' + str(i) + '.jpg'
+            all_image_url += image_url + ';'
+            with open('static/square/post_image/' + image_url, 'wb+') as f:
+                for chunk in image_hex.chunks():
+                    f.write(chunk)
+
+        post.image_url = all_image_url
         post.save()
 
     response = {'submit_status': 'success'}
