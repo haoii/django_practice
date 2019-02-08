@@ -1,0 +1,98 @@
+{
+	"rating": 
+	{
+		"max": 10, 
+		"average": 7.2, 
+		"stars": "35",
+		"min": 0
+	}, 
+	"reviews_count": 1080, 
+	"wish_count": 230042, 
+	"douban_site": "", 
+	"year": "2018", 
+	"images": 
+	{
+		"small": "https://img1.doubanio.com\/view\/photo\/s_ratio_poster\/public\/p2541662397.webp", 
+		"large": "https://img1.doubanio.com\/view\/photo\/s_ratio_poster\/public\/p2541662397.webp", 
+		"medium": "https://img1.doubanio.com\/view\/photo\/s_ratio_poster\/public\/p2541662397.webp"
+	}, 
+	"alt": "https:\/\/movie.douban.com\/subject\/26394152\/", 
+	"id": "26394152", 
+	"mobile_url": "https:\/\/movie.douban.com\/subject\/26394152\/mobile", 
+	"title": "\u5927\u9ec4\u8702", 
+	"do_count": null, 
+	"share_url": "https:\/\/m.douban.com\/movie\/subject\/26394152", 
+	"seasons_count": null, 
+	"schedule_url": "https:\/\/movie.douban.com\/subject\/26394152\/cinema\/", 
+	"episodes_count": null, 
+	"countries": ["\u7f8e\u56fd"], 
+	"genres": ["\u52a8\u4f5c", "\u79d1\u5e7b", "\u5192\u9669"], 
+	"collect_count": 297083, 
+	"casts": 
+	[
+		{
+			"alt": "https:\/\/movie.douban.com\/celebrity\/1312964\/", 
+			"avatars": 
+			{
+				"small": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p20419.webp", 
+				"large": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p20419.webp", 
+				"medium": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p20419.webp"
+			}, 
+			"name": "\u6d77\u8389\u00b7\u65af\u5766\u83f2\u5c14\u5fb7", 
+			"id": "1312964"
+		}, 
+		{
+			"alt": "https:\/\/movie.douban.com\/celebrity\/1376970\/", 
+			"avatars": 
+			{
+				"small": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1545624925.39.webp", 
+				"large": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1545624925.39.webp", 
+				"medium": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1545624925.39.webp"
+			}, 
+			"name": "\u5c0f\u8c6a\u5c14\u8d6b\u00b7\u5170\u767b\u4f2f\u683c", "id": "1376970"
+		}, 
+		{
+			"alt": "https:\/\/movie.douban.com\/celebrity\/1044883\/", 
+			"avatars": 
+			{
+				"small": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p23477.webp", 
+				"large": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p23477.webp", 
+				"medium": "https://img1.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p23477.webp"
+			}, 
+			"name": "\u7ea6\u7ff0\u00b7\u585e\u7eb3", 
+			"id": "1044883"
+		}, 
+		{
+			"alt": "https:\/\/movie.douban.com\/celebrity\/1361062\/", 
+			"avatars": 
+			{
+				"small": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/pkgttz5tui54cel_avatar_uploaded1471074955.45.webp", 
+				"large": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/pkgttz5tui54cel_avatar_uploaded1471074955.45.webp", 
+				"medium": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/pkgttz5tui54cel_avatar_uploaded1471074955.45.webp"
+			}, 
+			"name": "\u6770\u68ee\u00b7\u5fb7\u9c81\u514b", 
+			"id": "1361062"
+		}
+	], 
+	"current_season": null, 
+	"original_title": "Bumblebee", 
+	"summary": "\u672c\u7247\u6545\u4e8b\u8bbe\u5b9a\u57281987\u5e74\uff0c\u6b63\u503c\u9752\u6625\u671f\u768418\u5c81\u5c11\u5973\u67e5\u7406Charlie\uff08\u6d77\u8389\u00b7\u65af\u5766\u83f2\u5c14\u5fb7 \u9970\uff09\u5728\u52a0\u5dde\u6d77\u8fb9\u5c0f\u9547\u7684\u5e9f\u5f03\u573a\u91cc\u53d1\u73b0\u4e86\u4f24\u75d5\u7d2f\u7d2f\u7684\u5927\u9ec4\u8702\uff0c\u4ed6\u4eec\u4e4b\u95f4\u4f1a\u53d1\u751f\u600e\u6837\u7684\u6545\u4e8b\u5462\uff1f\u8ba9\u6211\u4eec\u62ed\u76ee\u4ee5\u5f85\uff01", 
+	"subtype": "movie", 
+	"directors": 
+	[
+		{
+			"alt": "https:\/\/movie.douban.com\/celebrity\/1305796\/", 
+			"avatars": 
+			{
+				"small": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1471358307.31.webp", 
+				"large": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1471358307.31.webp", 
+				"medium": "https://img3.doubanio.com\/view\/celebrity\/s_ratio_celebrity\/public\/p1471358307.31.webp"
+			}, 
+			"name": "\u7279\u62c9\u7ef4\u65af\u00b7\u5948\u7279", 
+			"id": "1305796"
+		}
+	], 
+	"comments_count": 55473, 
+	"ratings_count": 146176, 
+	"aka": ["\u5927\u9ec4\u8702\u5927\u7535\u5f71", "\u5927\u9ec4\u8702\u72ec\u7acb\u7535\u5f71", "\u53d8\u5f62\u91d1\u521a\u5916\u4f20\uff1a\u5927\u9ec4\u8702", "\u53d8\u5f62\u91d1\u521a\u5916\u4f20\u5927\u9ec4\u8702", "Brighton Falls"]
+}
