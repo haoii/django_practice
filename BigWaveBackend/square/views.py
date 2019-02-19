@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from .models import SquarePost, User
 
 
+@login_required(login_url='/accounts/login/')
 def index(request):
     def post_to_dict(post):
         return {
@@ -28,6 +30,10 @@ def index(request):
     }
 
     return JsonResponse(latest_posts_response)
+
+
+def test_login(request):
+    return HttpResponse('test_login')
 
 
 @csrf_exempt
