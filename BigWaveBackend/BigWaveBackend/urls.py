@@ -18,13 +18,14 @@ from django.urls import include, path
 
 from django.contrib.auth import views as auth_views
 
-# from square import views
+from square import views
 
 
 urlpatterns = [
     path('square/', include('square.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/login/', auth_views.LoginView.as_view()),
-    path('accounts/', include('django.contrib.auth.urls')),
-    # path('accounts/login/', views.test_login),
+    # path('accounts/login/', auth_views.LoginView.as_view()),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', views.test_login),
+    path('accounts/logout/', views.test_logout),
 ]

@@ -4,12 +4,16 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 from .models import SquarePost, User
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/login')
 def index(request):
+    data = {'data': 'test data'}
+    return JsonResponse(data)
+
     def post_to_dict(post):
         return {
             'user': {
@@ -33,7 +37,18 @@ def index(request):
 
 
 def test_login(request):
-    return HttpResponse('test_login')
+
+    user = authenticate(request, username='root', password='1')
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'data': 'test_login success'})
+    else:
+        return JsonResponse({'data': 'test_login failed'})
+
+
+def test_logout(request):
+    logout(request)
+    return JsonResponse({'data': 'test_logout success'})
 
 
 @csrf_exempt
