@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登陆</title>
+</head>
+<body>
+  <main style="align-content: center">
+    <p>会议室预订系统</p>
+
+    {% if form.errors %}
+      <p>用户名密码不匹配，请重试</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <table>
+      <tr>
+        <td>用户名</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr>
+        <td>密码</td>
+        <td>{{ form.password }}</td>
+      </tr>
+      </table>
+
+      <input type="submit" value="登陆">
+      <input type="hidden" name="next" value="{{ next }}">
+      <a href="url">忘记密码？</a>
+    </form>
+
+  </main>
+</body>
+</html>
