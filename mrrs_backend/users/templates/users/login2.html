@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登陆</title>
+</head>
+<body>
+  <main>
+    <p>会议室预订系统</p>
+
+    {% if error %}
+      <p>用户名密码不匹配，请重试</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'users:login' %}">
+      {% csrf_token %}
+
+      Username: <input type="text" name="user"><br>
+      Password: <input type="password" name="password">
+
+      <input type="submit" value="登陆">
+      <input type="hidden" name="next" value="{{ next }}">
+      <a href="url">忘记密码？</a>
+    </form>
+
+  </main>
+</body>
+</html>
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>登陆</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom styles for this templates -->
+    <link href="https://getbootstrap.com/docs/4.3/examples/floating-labels/floating-labels.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <form class="form-signin" method="post" action="{% url 'users:login' %}">
+      {% csrf_token %}
+
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">会议室预订系统</h1>
+      </div>
+
+      {% if error %}
+        <p style="color: red">用户名或密码错误，请重试</p>
+      {% else %}
+        <br>
+      {% endif %}
+
+      <div class="form-label-group">
+        <input type="text" name="user" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputEmail">用户名</label>
+      </div>
+
+      <div class="form-label-group">
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <label for="inputPassword">密码</label>
+      </div>
+
+      <div class="mb-3">
+        <a href="url">忘记密码？</a>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
+      <input type="hidden" name="next" value="{{ next }}">
+
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 版权所有</p>
+    </form>
+  </body>
+</html>
