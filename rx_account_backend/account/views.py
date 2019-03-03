@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Customer
+from .models import Customer, Supplier, CollectionFromCustomer
 
 
 def index(request):
@@ -78,5 +78,50 @@ def add_customer(request):
                             phone=phone, area=area, total_price=total_price, price_discount=price_discount,
                             price_received=1234, total_expense=4500, expense_paid=234.5)
     new_customer.save()
+    return HttpResponse('success')
 
+
+def suppliers(request):
+    def supplier_to_dict(supplier):
+        return {
+            'id': supplier.id,
+            'name': supplier.name,
+            'address': supplier.address,
+            'phone': supplier.phone,
+
+            'total_expense': supplier.total_expense,
+            'expense_paid': supplier.expense_paid,
+        }
+
+    latest_suppliers = Supplier.objects.order_by('-id')[:40]
+    latest_suppliers = [supplier_to_dict(c) for c in latest_suppliers]
+    latest_suppliers_response = {
+        'get_time': timezone.now(),
+        'latest_suppliers': latest_suppliers
+    }
+
+    return JsonResponse(latest_suppliers_response)
+
+
+@csrf_exempt
+def collect_from_customer(request):
+
+    name = request.POST.get("name")
+    amount = request.POST.get("amount")
+    collect_date = request.POST.get("collect_date")
+    remark = request.POST.get("remark")
+
+    try:
+        customer_address = name[name.index('(')+1: -1]
+        customer = Customer.objects.get(pk=customer_address)
+        amount = float(amount)
+        t = collect_date.split('-')
+        collect_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
+    except:
+        return HttpResponse('表单数据格式不正确')
+
+    new_collection = CollectionFromCustomer(customer=customer, amount=amount, collect_date=collect_date, remark=remark)
+    new_collection.save()
+    customer.price_received += amount
+    customer.save()
     return HttpResponse('success')

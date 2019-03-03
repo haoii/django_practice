@@ -16,7 +16,7 @@ class Customer(models.Model):
     expense_paid = models.FloatField('开销已出账', null=True, blank=True)
 
     def __str__(self):
-        return self.name + '  ' + self.address
+        return self.name + '(' + self.address + ')'
 
 
 class Supplier(models.Model):
@@ -28,7 +28,17 @@ class Supplier(models.Model):
     expense_paid = models.FloatField('总材料费已支付', null=True, blank=True)
 
     def __str__(self):
-        return str(self.id) + '  ' + self.name
+        return self.name + '(' + str(self.id) + ' )'
+
+
+class CollectionFromCustomer(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    amount = models.FloatField('金额')
+    collect_date = models.DateField('收款日期')
+    remark = models.CharField('备注', max_length=512)
+
+    def __str__(self):
+        return str(self.customer) + ' - ' + str(self.amount) + '元'
 
 
 
