@@ -103,6 +103,25 @@ def suppliers(request):
     return JsonResponse(latest_suppliers_response)
 
 
+def collections_from_customer(request):
+    def collection_to_dict(collection):
+        return {
+            'customer': str(collection.customer),
+            'amount': collection.amount,
+            'collect_date': collection.collect_date,
+            'remark': collection.remark,
+        }
+
+    latest_collections = CollectionFromCustomer.objects.order_by('-collect_date')[:40]
+    latest_collections = [collection_to_dict(c) for c in latest_collections]
+    latest_collections_response = {
+        'get_time': timezone.now(),
+        'latest_collections': latest_collections
+    }
+
+    return JsonResponse(latest_collections_response)
+
+
 @csrf_exempt
 def collect_from_customer(request):
 

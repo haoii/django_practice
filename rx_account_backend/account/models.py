@@ -35,7 +35,7 @@ class CollectionFromCustomer(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.FloatField('金额')
     collect_date = models.DateField('收款日期')
-    remark = models.CharField('备注', max_length=512)
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
 
     def __str__(self):
         return str(self.customer) + ' - ' + str(self.amount) + '元'
