@@ -32,13 +32,59 @@ class Supplier(models.Model):
 
 
 class CollectionFromCustomer(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='客户')
     amount = models.FloatField('金额')
     collect_date = models.DateField('收款日期')
     remark = models.CharField('备注', max_length=512, null=True, blank=True)
 
     def __str__(self):
         return str(self.customer) + ' - ' + str(self.amount) + '元'
+
+
+class MaterialFirstClass(models.Model):
+    name = models.CharField('类别名称', max_length=64)
+    description = models.CharField('描述', max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class MaterialSecondClass(models.Model):
+    name = models.CharField('类别名称', max_length=64)
+    first_class = models.ForeignKey(MaterialFirstClass, on_delete=models.CASCADE, verbose_name='一级类别')
+    description = models.CharField('描述', max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.first_class) + ' - ' + self.name
+
+
+class MaterialThirdClass(models.Model):
+    name = models.CharField('类别名称', max_length=64)
+    second_class = models.ForeignKey(MaterialSecondClass, on_delete=models.CASCADE, verbose_name='二级类别')
+    description = models.CharField('描述', max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.second_class) + ' - ' + self.name
+
+
+class Material(models.Model):
+    name = models.CharField('材料名称', max_length=64)
+    material_class = models.ForeignKey(MaterialThirdClass, on_delete=models.CASCADE, verbose_name='类别')
+    unit = models.CharField('单位', max_length=16)
+    description = models.CharField('描述', max_length=256, null=True, blank=True)
+    suppliers = models.ManyToManyField(Supplier, through='MaterialSupplierRelationship')
+
+    def __str__(self):
+        return self.name
+
+
+class MaterialSupplierRelationship(models.Model):
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, verbose_name='材料商')
+    price = models.FloatField('单价')
+
+    def __str__(self):
+        return str(self.material) + ' - 与 - ' + str(self.supplier)
 
 
 

@@ -10,7 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Customer, Supplier, CollectionFromCustomer
+from .models import (Customer, Supplier, CollectionFromCustomer,
+                     MaterialFirstClass, MaterialSecondClass, MaterialThirdClass,
+                     Material, MaterialSupplierRelationship)
 
 
 def index(request):
@@ -103,6 +105,17 @@ def suppliers(request):
     return JsonResponse(latest_suppliers_response)
 
 
+@csrf_exempt
+def add_supplier(request):
+    name = request.POST.get("name")
+    address = request.POST.get("address")
+    phone = request.POST.get("phone")
+
+    new_supplier = Supplier(name=name, address=address, phone=phone)
+    new_supplier.save()
+    return HttpResponse('success')
+
+
 def collections_from_customer(request):
     def collection_to_dict(collection):
         return {
@@ -144,3 +157,62 @@ def collect_from_customer(request):
     customer.price_received += amount
     customer.save()
     return HttpResponse('success')
+
+
+def material_class_data(request):
+
+    data = {}
+    first_classes = MaterialFirstClass.objects.all()
+    second_classes = MaterialSecondClass.objects.all()
+    third_classes = MaterialThirdClass.objects.all()
+    for first in first_classes:
+        data[str(first.name)] = {}
+    for second in second_classes:
+        data[str(second.first_class.name)][str(second.name)] = []
+    for third in third_classes:
+        data[str(third.second_class.first_class.name)][str(third.second_class.name)].append(str(third.name))
+
+    # def parse(data_dict):
+    #     if type(data_dict) == list:
+    #         return data_dict
+    #     data_list = []
+    #     for k, v in data_dict.items():
+    #         data_list.append({k: parse(v)})
+    #     return data_list
+    # parsed_data = parse(data)
+
+    parsed_data = []
+    for k, v in data.items():
+        if len(v) == 0:
+            parsed_data.append({k: [{'无': ['无']}]})
+        else:
+            second = []
+            for k2, v2 in v.items():
+                if len(v2) == 0:
+                    second.append({k2: ['无']})
+                else:
+                    second.append({k2: v2})
+            parsed_data.append({k: second})
+
+    print(parsed_data)
+    return HttpResponse('success')
+
+    # def supplier_to_dict(supplier):
+    #     return {
+    #         'id': supplier.id,
+    #         'name': supplier.name,
+    #         'address': supplier.address,
+    #         'phone': supplier.phone,
+    #
+    #         'total_expense': supplier.total_expense,
+    #         'expense_paid': supplier.expense_paid,
+    #     }
+    #
+    # latest_suppliers = Supplier.objects.order_by('-id')[:40]
+    # latest_suppliers = [supplier_to_dict(c) for c in latest_suppliers]
+    # latest_suppliers_response = {
+    #     'get_time': timezone.now(),
+    #     'latest_suppliers': latest_suppliers
+    # }
+    #
+    # return JsonResponse(latest_suppliers_response)
