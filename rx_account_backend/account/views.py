@@ -159,8 +159,7 @@ def collect_from_customer(request):
     return HttpResponse('success')
 
 
-def material_class_data(request):
-
+def material_classes(request):
     data = {}
     first_classes = MaterialFirstClass.objects.all()
     second_classes = MaterialSecondClass.objects.all()
@@ -194,25 +193,39 @@ def material_class_data(request):
                     second.append({k2: v2})
             parsed_data.append({k: second})
 
-    print(parsed_data)
-    return HttpResponse('success')
+    response = {
+        'get_time': timezone.now(),
+        'material_classes': parsed_data
+    }
+    return JsonResponse(response)
 
-    # def supplier_to_dict(supplier):
-    #     return {
-    #         'id': supplier.id,
-    #         'name': supplier.name,
-    #         'address': supplier.address,
-    #         'phone': supplier.phone,
-    #
-    #         'total_expense': supplier.total_expense,
-    #         'expense_paid': supplier.expense_paid,
-    #     }
-    #
-    # latest_suppliers = Supplier.objects.order_by('-id')[:40]
-    # latest_suppliers = [supplier_to_dict(c) for c in latest_suppliers]
-    # latest_suppliers_response = {
-    #     'get_time': timezone.now(),
-    #     'latest_suppliers': latest_suppliers
-    # }
-    #
-    # return JsonResponse(latest_suppliers_response)
+
+@csrf_exempt
+def materials(request):
+    first_class = request.POST.get("first_class")
+    second_class = request.POST.get("second_class")
+    third_class = request.POST.get("third_class")
+
+    material_class = MaterialThirdClass.objects.get(name__exact=third_class,
+                                                    second_class__name__exact=second_class,
+                                                    second_class__first_class__name__exact=first_class)
+
+    def material_to_dict(material):
+        return {
+            'id': material.id,
+            'name': material.name,
+            'unit': material.unit,
+            'description': material.description,
+
+            'total_expense': material.total_expense,
+            'total_used_amount': material.total_used_amount,
+        }
+
+    all_materials = material_class.material_set.all()
+    all_materials = [material_to_dict(c) for c in all_materials]
+    all_materials_response = {
+        'get_time': timezone.now(),
+        'all_materials': all_materials
+    }
+
+    return JsonResponse(all_materials_response)

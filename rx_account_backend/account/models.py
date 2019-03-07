@@ -74,6 +74,9 @@ class Material(models.Model):
     description = models.CharField('描述', max_length=256, null=True, blank=True)
     suppliers = models.ManyToManyField(Supplier, through='MaterialSupplierRelationship')
 
+    total_used_amount = models.FloatField('总用量', null=True, blank=True)
+    total_expense = models.FloatField('总花费', null=True, blank=True)
+
     def __str__(self):
         return self.name
 
