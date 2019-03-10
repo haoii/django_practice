@@ -12,7 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import (Customer, Supplier, CollectionFromCustomer,
                      MaterialFirstClass, MaterialSecondClass, MaterialThirdClass,
-                     Material, MaterialSupplierRelationship)
+                     Material, MaterialSupplierRelationship, MaterialOrder,
+                     MaterialOrderItem)
 
 
 def index(request):
@@ -229,3 +230,68 @@ def materials(request):
     }
 
     return JsonResponse(all_materials_response)
+
+
+def supplier_detail(request, supplier_id):
+    supplier = Supplier.objects.get(pk=supplier_id)
+    all_materials = supplier.material_set.all()
+
+    def material_to_dict(material):
+        relationship = MaterialSupplierRelationship.objects.get(supplier=supplier, material=material)
+
+        return {
+            'id': material.id,
+            'name': material.name,
+            'unit': material.unit,
+            'description': material.description,
+
+            'price': relationship.price,
+
+            'total_expense': material.total_expense,
+            'total_used_amount': material.total_used_amount,
+        }
+
+    all_materials = [material_to_dict(c) for c in all_materials]
+    all_materials_response = {
+        'get_time': timezone.now(),
+        'all_materials': all_materials
+    }
+
+    return JsonResponse(all_materials_response)
+
+
+def material_orders(request):
+    def item_to_dict(item):
+        return {
+            'item_num': item.item_num,
+            'material': item.material.name,
+            'material_unit': item.material.unit,
+            'supplier': item.supplier.name,
+            'customer_name': item.customer.name,
+            'customer_address': item.customer.address,
+
+            'quantity': item.quantity,
+            'price': item.price,
+            'is_paid': item.is_paid,
+            'remark': item.remark,
+        }
+
+    def order_to_dict(order):
+        order_items = order.materialorderitem_set.all()
+        return {
+            'id': order.id,
+            'order_date': order.order_date,
+            'clerk': order.clerk,
+            'remark': order.remark,
+
+            'order_items': [item_to_dict(c) for c in order_items],
+        }
+
+    latest_material_orders = MaterialOrder.objects.order_by('-order_date')[:40]
+    latest_material_orders = [order_to_dict(c) for c in latest_material_orders]
+    latest_orders_response = {
+        'get_time': timezone.now(),
+        'latest_material_orders': latest_material_orders
+    }
+
+    return JsonResponse(latest_orders_response)

@@ -90,5 +90,33 @@ class MaterialSupplierRelationship(models.Model):
         return str(self.material) + ' - 与 - ' + str(self.supplier)
 
 
+class MaterialOrder(models.Model):
+    order_date = models.DateField('采购日期')
+    clerk = models.CharField('负责人', max_length=64)
+
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.clerk + ' - ' + str(self.order_date)
+
+
+class MaterialOrderItem(models.Model):
+    order = models.ForeignKey(MaterialOrder, on_delete=models.CASCADE, verbose_name='订单')
+    item_num = models.IntegerField('序号')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, verbose_name='材料商')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='客户')
+    quantity = models.FloatField('数量')
+    price = models.FloatField('单价')
+    is_paid = models.BooleanField('已付款')
+
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.order) + ' - ' + str(self.item_num) + ' - ' + str(self.material) + ' - ' + str(self.customer)
+
+
+
+
 
 
