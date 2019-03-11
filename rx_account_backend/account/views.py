@@ -224,6 +224,7 @@ def materials(request):
 
     all_materials = material_class.material_set.all()
     all_materials = [material_to_dict(c) for c in all_materials]
+
     all_materials_response = {
         'get_time': timezone.now(),
         'all_materials': all_materials
@@ -295,3 +296,53 @@ def material_orders(request):
     }
 
     return JsonResponse(latest_orders_response)
+
+
+def suppliers_by_material(request, material_name):
+    material = Material.objects.get(name__exact=material_name)
+    available_suppliers = material.suppliers.all()
+
+    def supplier_to_dict(supplier):
+        relationship = MaterialSupplierRelationship.objects.get(supplier=supplier, material=material)
+
+        return {
+            'name': supplier.name,
+            'price': relationship.price,
+        }
+
+    available_suppliers = [supplier_to_dict(c) for c in available_suppliers]
+    available_suppliers_response = {
+        'get_time': timezone.now(),
+        'available_suppliers': available_suppliers
+    }
+
+    return JsonResponse(available_suppliers_response)
+
+
+@csrf_exempt
+def add_material_order(request):
+    order_items = request.POST.get("order_items")
+    order_date = request.POST.get("order_date")
+    remark = request.POST.get("remark")
+    print(order_items)
+    return HttpResponse('success')
+
+    # name = request.POST.get("name")
+    # amount = request.POST.get("amount")
+    # collect_date = request.POST.get("collect_date")
+    # remark = request.POST.get("remark")
+    #
+    # try:
+    #     customer_address = name[name.index('(')+1: -1]
+    #     customer = Customer.objects.get(pk=customer_address)
+    #     amount = float(amount)
+    #     t = collect_date.split('-')
+    #     collect_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
+    # except:
+    #     return HttpResponse('表单数据格式不正确')
+    #
+    # new_collection = CollectionFromCustomer(customer=customer, amount=amount, collect_date=collect_date, remark=remark)
+    # new_collection.save()
+    # customer.price_received += amount
+    # customer.save()
+    # return HttpResponse('success')
