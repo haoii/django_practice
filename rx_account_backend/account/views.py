@@ -343,7 +343,7 @@ def add_material_order(request):
         customer_address = customer_address[1][:-1]
         customer = Customer.objects.get(address__exact=customer_address)
         new_order_item = MaterialOrderItem(order=new_order,
-                                           item_num=i,
+                                           item_num=i+1,
                                            material=material,
                                            supplier=supplier,
                                            customer=customer,
