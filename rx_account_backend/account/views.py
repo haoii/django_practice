@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -324,25 +325,32 @@ def add_material_order(request):
     order_items = request.POST.get("order_items")
     order_date = request.POST.get("order_date")
     remark = request.POST.get("remark")
-    print(order_items)
-    return HttpResponse('success')
 
-    # name = request.POST.get("name")
-    # amount = request.POST.get("amount")
-    # collect_date = request.POST.get("collect_date")
-    # remark = request.POST.get("remark")
-    #
-    # try:
-    #     customer_address = name[name.index('(')+1: -1]
-    #     customer = Customer.objects.get(pk=customer_address)
-    #     amount = float(amount)
-    #     t = collect_date.split('-')
-    #     collect_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
-    # except:
-    #     return HttpResponse('表单数据格式不正确')
-    #
-    # new_collection = CollectionFromCustomer(customer=customer, amount=amount, collect_date=collect_date, remark=remark)
-    # new_collection.save()
-    # customer.price_received += amount
-    # customer.save()
-    # return HttpResponse('success')
+    try:
+        t = order_date.split('-')
+        order_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
+        order_items = json.loads(order_items)
+    except:
+        return HttpResponse('表单数据格式不正确')
+
+    new_order = MaterialOrder(order_date=order_date, clerk='郝高峰', remark=remark)
+    new_order.save()
+
+    for i, v in enumerate(order_items):
+        material = Material.objects.get(name__exact=v['material'])
+        supplier = Supplier.objects.get(name__exact=v['supplier'])
+        customer_address = v['customer_address'].split('(')
+        customer_address = customer_address[1][:-1]
+        customer = Customer.objects.get(address__exact=customer_address)
+        new_order_item = MaterialOrderItem(order=new_order,
+                                           item_num=i,
+                                           material=material,
+                                           supplier=supplier,
+                                           customer=customer,
+                                           quantity=v['quantity'],
+                                           price=v['price'],
+                                           is_paid=False,
+                                           remark=v['remark'])
+        new_order_item.save()
+
+    return HttpResponse('success')
