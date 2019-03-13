@@ -325,11 +325,13 @@ def add_material_order(request):
     order_items = request.POST.get("order_items")
     order_date = request.POST.get("order_date")
     remark = request.POST.get("remark")
+    suppliers_paid = request.POST.get("suppliers_paid")
 
     try:
         t = order_date.split('-')
         order_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
         order_items = json.loads(order_items)
+        suppliers_paid = json.loads(suppliers_paid)
     except:
         return HttpResponse('表单数据格式不正确')
 
@@ -349,7 +351,7 @@ def add_material_order(request):
                                            customer=customer,
                                            quantity=v['quantity'],
                                            price=v['price'],
-                                           is_paid=False,
+                                           is_paid=suppliers_paid[v['supplier']],
                                            remark=v['remark'])
         new_order_item.save()
 
