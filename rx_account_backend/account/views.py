@@ -10,6 +10,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F, Sum
 
 from .models import (Customer, Supplier, CollectionFromCustomer,
                      MaterialFirstClass, MaterialSecondClass, MaterialThirdClass,
@@ -38,9 +39,21 @@ def customers(request):
             'total_price': customer.total_price,
             'price_discount': customer.price_discount,
             'price_received': customer.price_received,
-            'total_expense': customer.total_expense,
-            'expense_paid': customer.expense_paid,
+            'total_expense': customers_total_expense[customer.address] if customer.address in customers_total_expense else 0,
+            'expense_paid': customers_expense_paid[customer.address] if customer.address in customers_expense_paid else 0,
         }
+
+    total_expense = MaterialOrderItem.objects.values('customer__address').annotate(
+        total=Sum(F('price') * F('quantity')))
+    customers_total_expense = {}
+    for i in total_expense:
+        customers_total_expense[i['customer__address']] = i['total']
+
+    expense_paid = MaterialOrderItem.objects.filter(is_paid__exact=True).values('customer__address').annotate(
+        total=Sum(F('price') * F('quantity')))
+    customers_expense_paid = {}
+    for i in expense_paid:
+        customers_expense_paid[i['customer__address']] = i['total']
 
     latest_customers = Customer.objects.order_by('-sign_date')[:40]
     latest_customers = [customer_to_dict(c) for c in latest_customers]
@@ -93,9 +106,21 @@ def suppliers(request):
             'address': supplier.address,
             'phone': supplier.phone,
 
-            'total_expense': supplier.total_expense,
-            'expense_paid': supplier.expense_paid,
+            'total_expense': suppliers_total_expense[supplier.name] if supplier.name in suppliers_total_expense else 0,
+            'expense_paid': suppliers_expense_paid[supplier.name] if supplier.name in suppliers_expense_paid else 0,
         }
+
+    total_expense = MaterialOrderItem.objects.values('supplier__name').annotate(
+        total=Sum(F('price') * F('quantity')))
+    suppliers_total_expense = {}
+    for i in total_expense:
+        suppliers_total_expense[i['supplier__name']] = i['total']
+
+    expense_paid = MaterialOrderItem.objects.filter(is_paid__exact=True).values('supplier__name').annotate(
+        total=Sum(F('price') * F('quantity')))
+    suppliers_expense_paid = {}
+    for i in expense_paid:
+        suppliers_expense_paid[i['supplier__name']] = i['total']
 
     latest_suppliers = Supplier.objects.order_by('-id')[:40]
     latest_suppliers = [supplier_to_dict(c) for c in latest_suppliers]
