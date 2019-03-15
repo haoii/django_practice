@@ -15,7 +15,7 @@ from django.db.models import F, Sum
 from .models import (Customer, Supplier, CollectionFromCustomer,
                      MaterialFirstClass, MaterialSecondClass, MaterialThirdClass,
                      Material, MaterialSupplierRelationship, MaterialOrder,
-                     MaterialOrderItem)
+                     MaterialOrderItem, Warehouse, WarehouseMaterialRelationship)
 
 
 def index(request):
@@ -381,3 +381,57 @@ def add_material_order(request):
         new_order_item.save()
 
     return HttpResponse('success')
+
+
+def warehouses(request):
+    def warehouse_to_dict(warehouse):
+        return {
+            'name': warehouse.name,
+            'address': warehouse.address,
+            'remark': warehouse.remark,
+        }
+
+    all_warehouses = Warehouse.objects.all()
+    all_warehouses = [warehouse_to_dict(c) for c in all_warehouses]
+    all_warehouses_response = {
+        'get_time': timezone.now(),
+        'all_warehouses': all_warehouses
+    }
+
+    return JsonResponse(all_warehouses_response)
+
+
+@csrf_exempt
+def warehouse_materials(request):
+    first_class = request.POST.get("first_class")
+    second_class = request.POST.get("second_class")
+    third_class = request.POST.get("third_class")
+    warehouse = request.POST.get("warehouse")
+
+    material_class = MaterialThirdClass.objects.get(name__exact=third_class,
+                                                    second_class__name__exact=second_class,
+                                                    second_class__first_class__name__exact=first_class)
+    warehouse = Warehouse.objects.get(name__exact=warehouse)
+    all_materials = warehouse.materials.filter(material_class=material_class)
+
+    def material_to_dict(material):
+        relationship = WarehouseMaterialRelationship.objects.get(material=material, warehouse=warehouse)
+
+        return {
+            'id': material.id,
+            'name': material.name,
+            'unit': material.unit,
+            'description': material.description,
+
+            'price': relationship.price,
+            'quantity': relationship.quantity,
+        }
+
+    all_materials = [material_to_dict(c) for c in all_materials]
+
+    all_materials_response = {
+        'get_time': timezone.now(),
+        'all_materials': all_materials
+    }
+
+    return JsonResponse(all_materials_response)

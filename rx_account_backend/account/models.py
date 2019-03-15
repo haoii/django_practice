@@ -116,6 +116,25 @@ class MaterialOrderItem(models.Model):
         return str(self.order) + ' - ' + str(self.item_num) + ' - ' + str(self.material) + ' - ' + str(self.customer)
 
 
+class Warehouse(models.Model):
+    name = models.CharField('仓库名', max_length=64)
+    address = models.CharField('地址', max_length=256, null=True, blank=True)
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    materials = models.ManyToManyField(Material, through='WarehouseMaterialRelationship')
+
+    def __str__(self):
+        return self.name
+
+
+class WarehouseMaterialRelationship(models.Model):
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, verbose_name='仓库')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    price = models.FloatField('单价')
+    quantity = models.FloatField('数量')
+
+    def __str__(self):
+        return str(self.warehouse) + ' - 与 - ' + str(self.material)
 
 
 

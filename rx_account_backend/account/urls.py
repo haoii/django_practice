@@ -9,6 +9,9 @@ urlpatterns = [
     path('material_classes/', views.material_classes, name='material_classes'),
     path('materials/', views.materials, name='materials'),
 
+    path('warehouses/', views.warehouses, name='warehouses'),
+    path('warehouse_materials/', views.warehouse_materials, name='warehouse_materials'),
+
     path('material_orders/', views.material_orders, name='material_orders'),
 
     path('supplier_detail/<str:supplier_id>/', views.supplier_detail, name='supplier_detail'),
