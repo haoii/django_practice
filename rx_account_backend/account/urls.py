@@ -20,7 +20,7 @@ urlpatterns = [
     path('add_customer/', views.add_customer, name='add_customer'),
     path('add_supplier/', views.add_supplier, name='add_supplier'),
 
-    path('add_material_order/', views.add_material_order, name='add_material_order'),
+    # path('add_material_order/', views.add_material_order, name='add_material_order'),
 
     path('collect_from_customer/', views.collect_from_customer, name='collect_from_customer'),
     path('collections_from_customer/', views.collections_from_customer, name='collections_from_customer'),
