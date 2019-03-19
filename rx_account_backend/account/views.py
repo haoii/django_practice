@@ -344,19 +344,32 @@ def material_orders(request):
 def suppliers_by_material(request, material_name):
     material = Material.objects.get(name__exact=material_name)
     available_suppliers = material.suppliers.all()
+    available_warehouses = material.warehouse_set.all()
 
     def supplier_to_dict(supplier):
         relationship = MaterialSupplierRelationship.objects.get(supplier=supplier, material=material)
 
         return {
+            'type': 'supplier',
             'name': supplier.name,
             'price': relationship.price,
         }
 
+    def warehouse_to_dict(warehouse):
+        relationship = WarehouseMaterialRelationship.objects.get(warehouse=warehouse, material=material)
+
+        return {
+            'type': 'warehouse',
+            'name': warehouse.name,
+            'price': relationship.price,
+            'quantity': relationship.quantity,
+        }
+
     available_suppliers = [supplier_to_dict(c) for c in available_suppliers]
+    available_warehouses = [warehouse_to_dict(c) for c in available_warehouses]
     available_suppliers_response = {
         'get_time': timezone.now(),
-        'available_suppliers': available_suppliers
+        'available_from': available_warehouses + available_suppliers
     }
 
     return JsonResponse(available_suppliers_response)
