@@ -16,7 +16,11 @@ from .models import (Customer, Supplier, CollectionFromCustomer,
                      MaterialFirstClass, MaterialSecondClass, MaterialThirdClass,
                      Material, MaterialSupplierRelationship, MaterialOrder,
                      MaterialOrderDemandItem, MaterialOrderPurchaseItem, Warehouse,
-                     WarehouseMaterialRelationship)
+                     WarehouseMaterialRelationship, MaterialInOrderRelationship,
+                     WarehouseInMaterialInOrderRelationship, SupplierInMaterialInOrderRelationship,
+                     CustomerInOrderRelationship, MaterialInCustomerInOrderRelationship,
+                     WarehouseInOrderRelationship, SupplierInOrderRelationship,
+                     MaterialInWarehouseInOrderRelationship, MaterialInSupplierInOrderRelationship)
 
 
 def index(request):
@@ -292,43 +296,163 @@ def supplier_detail(request, supplier_id):
     return JsonResponse(all_materials_response)
 
 
-def material_orders(request):
-    def demand_item_to_dict(item):
-        return {
-            'item_num': item.item_num,
-            'material': item.material.name,
-            'material_unit': item.material.unit,
-            'customer_name': item.customer.name,
-            'customer_address': item.customer.address,
-            'quantity': item.quantity,
-            'remark': item.remark,
-        }
+# def material_orders(request):
+#     def demand_item_to_dict(item):
+#         return {
+#             'item_num': item.item_num,
+#             'material': item.material.name,
+#             'material_unit': item.material.unit,
+#             'customer_name': item.customer.name,
+#             'customer_address': item.customer.address,
+#             'quantity': item.quantity,
+#             'remark': item.remark,
+#         }
+#
+#     def purchase_item_to_dict(item):
+#         return {
+#             'material': item.material.name,
+#             'material_unit': item.material.unit,
+#             'purchase_type': item.purchase_type,
+#             # 'warehouse': item.warehouse.name if item.warehouse else None,
+#             # 'supplier': item.supplier.name if item.supplier else None,
+#             'from': item.warehouse.name if item.warehouse else item.supplier.name,
+#             'quantity': item.quantity,
+#             'price': item.price,
+#             'is_paid': item.is_paid,
+#             'remark': item.remark,
+#         }
+#
+#     def order_to_dict(order):
+#         order_demand_items = order.materialorderdemanditem_set.all()
+#         order_purchase_items = order.materialorderpurchaseitem_set.all()
+#         return {
+#             'id': order.id,
+#             'order_date': order.order_date,
+#             'clerk': order.clerk,
+#             'remark': order.remark,
+#
+#             'order_demand_items': [demand_item_to_dict(c) for c in order_demand_items],
+#             'order_purchase_items': [purchase_item_to_dict(c) for c in order_purchase_items],
+#         }
+#
+#     latest_material_orders = MaterialOrder.objects.order_by('-order_date')[:40]
+#     latest_material_orders = [order_to_dict(c) for c in latest_material_orders]
+#     latest_orders_response = {
+#         'get_time': timezone.now(),
+#         'latest_material_orders': latest_material_orders
+#     }
+#
+#     return JsonResponse(latest_orders_response)
 
-    def purchase_item_to_dict(item):
-        return {
-            'material': item.material.name,
-            'material_unit': item.material.unit,
-            'purchase_type': item.purchase_type,
-            # 'warehouse': item.warehouse.name if item.warehouse else None,
-            # 'supplier': item.supplier.name if item.supplier else None,
-            'from': item.warehouse.name if item.warehouse else item.supplier.name,
-            'quantity': item.quantity,
-            'price': item.price,
-            'is_paid': item.is_paid,
-            'remark': item.remark,
-        }
+
+def material_orders(request):
+
+    def get_material_in_supplier_in_order(supplier_in_order):
+        material_in_supplier_in_order_set = supplier_in_order.materialinsupplierinorderrelationship_set.all()
+        material_in_supplier_in_order_response = {}
+        for m in material_in_supplier_in_order_set:
+            material_in_supplier_in_order_response[str(m.material)] = {
+                'quantity': m.quantity,
+                'unit': m.material.unit,
+                'price': m.price,
+                'remark': m.remark,
+            }
+        return material_in_supplier_in_order_response
+
+    def get_material_in_warehouse_in_order(warehouse_in_order):
+        material_in_warehouse_in_order_set = warehouse_in_order.materialinwarehouseinorderrelationship_set.all()
+        material_in_warehouse_in_order_response = {}
+        for m in material_in_warehouse_in_order_set:
+            material_in_warehouse_in_order_response[str(m.material)] = {
+                'quantity': m.quantity,
+                'unit': m.material.unit,
+                'price': m.price,
+                'remark': m.remark,
+            }
+        return material_in_warehouse_in_order_response
+
+    def get_from_in_order(order):
+        warehouse_in_order_set = order.warehouseinorderrelationship_set.all()
+        supplier_in_order_set = order.supplierinorderrelationship_set.all()
+        from_in_order_response = {}
+        for w in warehouse_in_order_set:
+            from_in_order_response[str(w.warehouse)] = {
+                'is_paid': w.is_paid,
+                'expense': w.expense,
+                'material_in_from_in_order': get_material_in_warehouse_in_order(w),
+            }
+        for s in supplier_in_order_set:
+            from_in_order_response[str(s.supplier)] = {
+                'is_paid': s.is_paid,
+                'expense': s.expense,
+                'material_in_from_in_order': get_material_in_supplier_in_order(s),
+            }
+        return from_in_order_response
+
+    def get_from_in_material_in_order(material_in_order):
+        warehouse_in_material_in_order = material_in_order.warehouseinmaterialinorderrelationship_set.all()
+        supplier_in_material_in_order = material_in_order.supplierinmaterialinorderrelationship_set.all()
+        from_in_material_in_order_response = {}
+        for w in warehouse_in_material_in_order:
+            from_in_material_in_order_response[str(w.warehouse)] = {
+                'quantity': w.quantity,
+                'price': w.price,
+                'is_paid': w.is_paid,
+                'remark': w.remark,
+            }
+        for s in supplier_in_material_in_order:
+            from_in_material_in_order_response[str(s.supplier)] = {
+                'quantity': s.quantity,
+                'price': s.price,
+                'is_paid': s.is_paid,
+                'remark': s.remark,
+            }
+        return from_in_material_in_order_response
+
+    def get_material_in_order(order):
+        material_in_order_set = order.materialinorderrelationship_set.all()
+        material_in_order_response = {}
+        for m in material_in_order_set:
+            material_in_order_response[str(m.material)] = {
+                'quantity': m.quantity,
+                'expense': m.expense,
+                'unit': m.material.unit,
+                'from_in_material_in_order': get_from_in_material_in_order(m),
+            }
+        return material_in_order_response
+
+    def get_material_in_customer_in_order(customer_in_order):
+        material_in_customer_in_order_set = customer_in_order.materialincustomerinorderrelationship_set.all()
+        material_in_customer_in_order_response = {}
+        for m in material_in_customer_in_order_set:
+            material_in_customer_in_order_response[str(m.material)] = {
+                'unit': m.material.unit,
+                'quantity': m.quantity,
+                'remark': m.remark,
+                'average_price': m.material_in_order.expense / m.material_in_order.quantity,
+                'paid_ratio': m.material_in_order.paid_ratio,
+            }
+        return material_in_customer_in_order_response
+
+    def get_customer_in_order(order):
+        customer_in_order_set = order.customerinorderrelationship_set.all()
+        customer_in_order_response = {}
+        for c in customer_in_order_set:
+            customer_in_order_response[str(c.customer)] = {
+                'material_in_customer_in_order': get_material_in_customer_in_order(c),
+            }
+        return customer_in_order_response
 
     def order_to_dict(order):
-        order_demand_items = order.materialorderdemanditem_set.all()
-        order_purchase_items = order.materialorderpurchaseitem_set.all()
         return {
             'id': order.id,
             'order_date': order.order_date,
             'clerk': order.clerk,
             'remark': order.remark,
 
-            'order_demand_items': [demand_item_to_dict(c) for c in order_demand_items],
-            'order_purchase_items': [purchase_item_to_dict(c) for c in order_purchase_items],
+            'customer_in_order': get_customer_in_order(order),
+            'material_in_order': get_material_in_order(order),
+            'from_in_order': get_from_in_order(order),
         }
 
     latest_material_orders = MaterialOrder.objects.order_by('-order_date')[:40]
@@ -346,30 +470,26 @@ def suppliers_by_material(request, material_name):
     available_suppliers = material.suppliers.all()
     available_warehouses = material.warehouse_set.all()
 
-    def supplier_to_dict(supplier):
-        relationship = MaterialSupplierRelationship.objects.get(supplier=supplier, material=material)
+    available_from_response = {}
 
-        return {
-            'type': 'supplier',
-            'name': supplier.name,
-            'price': relationship.price,
-        }
-
-    def warehouse_to_dict(warehouse):
-        relationship = WarehouseMaterialRelationship.objects.get(warehouse=warehouse, material=material)
-
-        return {
+    for w in available_warehouses:
+        relationship = WarehouseMaterialRelationship.objects.get(warehouse=w, material=material)
+        available_from_response[str(w)] = {
             'type': 'warehouse',
-            'name': warehouse.name,
-            'price': relationship.price,
+            'price': str(relationship.price),
             'quantity': relationship.quantity,
         }
 
-    available_suppliers = [supplier_to_dict(c) for c in available_suppliers]
-    available_warehouses = [warehouse_to_dict(c) for c in available_warehouses]
+    for s in available_suppliers:
+        relationship = MaterialSupplierRelationship.objects.get(supplier=s, material=material)
+        available_from_response[str(s)] = {
+            'type': 'supplier',
+            'price': str(relationship.price),
+        }
+
     available_suppliers_response = {
         'get_time': timezone.now(),
-        'available_from': available_warehouses + available_suppliers
+        'available_from': available_from_response,
     }
 
     return JsonResponse(available_suppliers_response)
@@ -411,6 +531,158 @@ def suppliers_by_material(request, material_name):
 #         new_order_item.save()
 #
 #     return HttpResponse('success')
+
+
+@csrf_exempt
+def add_material_order(request):
+    customer_demand_items = request.POST.get("customer_demand_items")
+    material_demand_sum = request.POST.get("material_demand_sum")
+    order_date = request.POST.get("order_date")
+    remark = request.POST.get("remark")
+    from_paid = request.POST.get("from_paid")
+
+
+
+    try:
+        t = order_date.split('-')
+        order_date = datetime.date(int(t[0]), int(t[1]), int(t[2]))
+        customer_demand_items = json.loads(customer_demand_items)
+        material_demand_sum = json.loads(material_demand_sum)
+        from_paid = json.loads(from_paid)
+    except:
+        return HttpResponse('表单数据格式不正确')
+
+    new_order = MaterialOrder(order_date=order_date, clerk='郝高峰', remark=remark)
+    new_order.save()
+
+    for material, material_demand in material_demand_sum.items():
+        for purchase_item in material_demand['purchase_items']:
+            if purchase_item['type'] == 'warehouse' or from_paid[purchase_item['from']]:
+                purchase_item['is_paid'] = True
+                if 'expense_paid' in material_demand:
+                    material_demand['expense_paid'] += purchase_item['price'] * purchase_item['quantity']
+                else:
+                    material_demand['expense_paid'] = purchase_item['price'] * purchase_item['quantity']
+            else:
+                purchase_item['is_paid'] = False
+
+    for material_name, material_demand in material_demand_sum.items():
+        material = Material.objects.get(name__exact=material_name)
+        new_material_in_order = MaterialInOrderRelationship(
+            order=new_order,
+            material=material,
+            quantity=material_demand['quantity'],
+            expense=material_demand['expense'],
+            paid_ratio=material_demand['expense_paid'] / material_demand['expense']
+        )
+        new_material_in_order.save()
+        material_demand['material_in_order'] = new_material_in_order
+
+        for purchase_item in material_demand['purchase_items']:
+            if purchase_item['type'] == 'warehouse':
+                warehouse = Warehouse.objects.get(name__exact=purchase_item['from'][:purchase_item['from'].index('(')])
+                new_warehouse_in_material_in_order = WarehouseInMaterialInOrderRelationship(
+                    material_in_order=new_material_in_order,
+                    warehouse=warehouse,
+                    quantity=purchase_item['quantity'],
+                    price=purchase_item['price'],
+                    is_paid=purchase_item['is_paid'],
+                    remark=purchase_item['remark']
+                )
+                new_warehouse_in_material_in_order.save()
+            elif purchase_item['type'] == 'supplier':
+                supplier = Supplier.objects.get(name__exact=purchase_item['from'])
+                new_supplier_in_material_in_order = SupplierInMaterialInOrderRelationship(
+                    material_in_order=new_material_in_order,
+                    supplier=supplier,
+                    quantity=purchase_item['quantity'],
+                    price=purchase_item['price'],
+                    is_paid=purchase_item['is_paid'],
+                    remark=purchase_item['remark']
+                )
+                new_supplier_in_material_in_order.save()
+
+    for customer_address, customer_demand in customer_demand_items.items():
+        customer = Customer.objects.get(address__exact=customer_address[customer_address.index('(')+1:-1])
+        new_customer_in_order = CustomerInOrderRelationship(
+            order=new_order,
+            customer=customer
+        )
+        new_customer_in_order.save()
+        for demand_item in customer_demand:
+            material = Material.objects.get(name__exact=demand_item['material'])
+            new_material_in_customer_in_order = MaterialInCustomerInOrderRelationship(
+                customer_in_order=new_customer_in_order,
+                material=material,
+                quantity=demand_item['quantity'],
+                remark=demand_item['remark'],
+                material_in_order=material_demand_sum[demand_item['material']]['material_in_order']
+            )
+            new_material_in_customer_in_order.save()
+
+    from_purchase_sum = {}
+    for material, material_demand in material_demand_sum.items():
+        for purchase_item in material_demand['purchase_items']:
+            if purchase_item['from'] in from_purchase_sum:
+                from_purchase_sum[purchase_item['from']]['expense'] += purchase_item['price'] * purchase_item[
+                    'quantity']
+                from_purchase_sum[purchase_item['from']]['purchase_items'].append(purchase_item)
+            else:
+                from_purchase_sum[purchase_item['from']] = {
+                    'expense': purchase_item['price'] * purchase_item['quantity'],
+                    'purchase_items': [purchase_item],
+                    'type': purchase_item['type'],
+                }
+
+    for material_from, from_purchase in from_purchase_sum.items():
+        if from_purchase['type'] == 'warehouse':
+            warehouse = Warehouse.objects.get(name__exact=material_from[:material_from.index('(')])
+            new_warehouse_in_order = WarehouseInOrderRelationship(
+                order=new_order,
+                warehouse=warehouse,
+                is_paid=from_paid[material_from],
+                expense=from_purchase['expense']
+            )
+            new_warehouse_in_order.save()
+
+            for purchase_item in from_purchase['purchase_items']:
+                material = Material.objects.get(name__exact=purchase_item['material'])
+                new_material_in_warehouse_in_order = MaterialInWarehouseInOrderRelationship(
+                    warehouse_in_order=new_warehouse_in_order,
+                    material=material,
+                    quantity=purchase_item['quantity'],
+                    price=purchase_item['price'],
+                    remark=purchase_item['remark']
+                )
+                new_material_in_warehouse_in_order.save()
+
+        elif from_purchase['type'] == 'supplier':
+            supplier = Supplier.objects.get(name__exact=material_from)
+            new_supplier_in_order = SupplierInOrderRelationship(
+                order=new_order,
+                supplier=supplier,
+                is_paid=from_paid[material_from],
+                expense=from_purchase['expense']
+            )
+            new_supplier_in_order.save()
+
+            for purchase_item in from_purchase['purchase_items']:
+                material = Material.objects.get(name__exact=purchase_item['material'])
+                new_material_in_supplier_in_order = MaterialInSupplierInOrderRelationship(
+                    supplier_in_order=new_supplier_in_order,
+                    material=material,
+                    quantity=purchase_item['quantity'],
+                    price=purchase_item['price'],
+                    remark=purchase_item['remark']
+                )
+                new_material_in_supplier_in_order.save()
+
+
+    print(customer_demand_items)
+    print('\n')
+    print(material_demand_sum)
+
+    return HttpResponse('success')
 
 
 def warehouses(request):

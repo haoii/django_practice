@@ -28,7 +28,7 @@ class Supplier(models.Model):
     expense_paid = models.FloatField('总材料费已支付', null=True, blank=True)
 
     def __str__(self):
-        return self.name + '(' + str(self.id) + ' )'
+        return self.name
 
 
 class CollectionFromCustomer(models.Model):
@@ -38,7 +38,7 @@ class CollectionFromCustomer(models.Model):
     remark = models.CharField('备注', max_length=512, null=True, blank=True)
 
     def __str__(self):
-        return str(self.customer) + ' - ' + str(self.amount) + '元'
+        return str(self.customer) + '_' + str(self.amount) + '元'
 
 
 class MaterialFirstClass(models.Model):
@@ -55,7 +55,7 @@ class MaterialSecondClass(models.Model):
     description = models.CharField('描述', max_length=256, null=True, blank=True)
 
     def __str__(self):
-        return str(self.first_class) + ' - ' + self.name
+        return str(self.first_class) + '_' + self.name
 
 
 class MaterialThirdClass(models.Model):
@@ -64,7 +64,7 @@ class MaterialThirdClass(models.Model):
     description = models.CharField('描述', max_length=256, null=True, blank=True)
 
     def __str__(self):
-        return str(self.second_class) + ' - ' + self.name
+        return str(self.second_class) + '_' + self.name
 
 
 class Material(models.Model):
@@ -98,7 +98,7 @@ class Warehouse(models.Model):
     materials = models.ManyToManyField(Material, through='WarehouseMaterialRelationship')
 
     def __str__(self):
-        return self.name
+        return self.name+'(仓库)'
 
 
 class WarehouseMaterialRelationship(models.Model):
@@ -114,11 +114,125 @@ class WarehouseMaterialRelationship(models.Model):
 class MaterialOrder(models.Model):
     order_date = models.DateField('采购日期')
     clerk = models.CharField('负责人', max_length=64)
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
 
+    customers = models.ManyToManyField(Customer, through='CustomerInOrderRelationship')
+    materials = models.ManyToManyField(Material, through='MaterialInOrderRelationship')
+    warehouses = models.ManyToManyField(Warehouse, through='WarehouseInOrderRelationship')
+    suppliers = models.ManyToManyField(Supplier, through='SupplierInOrderRelationship')
+
+    def __str__(self):
+        return '订单号：' + str(self.id)
+
+
+class MaterialInOrderRelationship(models.Model):
+    order = models.ForeignKey(MaterialOrder, on_delete=models.CASCADE, verbose_name='订单')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+
+    quantity = models.FloatField('总数量')
+    expense = models.FloatField('总花费')
+    paid_ratio = models.FloatField('已支付比例')
+
+    warehouses = models.ManyToManyField(Warehouse, through='WarehouseInMaterialInOrderRelationship')
+    suppliers = models.ManyToManyField(Supplier, through='SupplierInMaterialInOrderRelationship')
+
+    def __str__(self):
+        return str(self.order) + ' - 与 - ' + str(self.material)
+
+
+class WarehouseInMaterialInOrderRelationship(models.Model):
+    material_in_order = models.ForeignKey(MaterialInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单材料')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, verbose_name='仓库')
+    quantity = models.FloatField('数量')
+    price = models.FloatField('单价')
+    is_paid = models.BooleanField('已支付', default=True)
     remark = models.CharField('备注', max_length=512, null=True, blank=True)
 
     def __str__(self):
-        return str(self.id) + ' - ' + self.clerk + ' - ' + str(self.order_date)
+        return str(self.material_in_order) + ' - 与 - ' + str(self.warehouse)
+
+
+class SupplierInMaterialInOrderRelationship(models.Model):
+    material_in_order = models.ForeignKey(MaterialInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单材料')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, verbose_name='材料商')
+    quantity = models.FloatField('数量')
+    price = models.FloatField('单价')
+    is_paid = models.BooleanField('已支付')
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.material_in_order) + ' - 与 - ' + str(self.supplier)
+
+
+class CustomerInOrderRelationship(models.Model):
+    order = models.ForeignKey(MaterialOrder, on_delete=models.CASCADE, verbose_name='订单')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='客户')
+
+    materials = models.ManyToManyField(Material, through='MaterialInCustomerInOrderRelationship')
+
+    def __str__(self):
+        return str(self.order) + ' - 与 - ' + str(self.customer)
+
+
+class MaterialInCustomerInOrderRelationship(models.Model):
+    customer_in_order = models.ForeignKey(CustomerInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单客户')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    quantity = models.FloatField('数量')
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    material_in_order = models.ForeignKey(MaterialInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单材料')
+
+    def __str__(self):
+        return str(self.customer_in_order) + ' - 与 - ' + str(self.material)
+
+
+class WarehouseInOrderRelationship(models.Model):
+    order = models.ForeignKey(MaterialOrder, on_delete=models.CASCADE, verbose_name='订单')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, verbose_name='仓库')
+
+    is_paid = models.BooleanField('已支付', default=True)
+    expense = models.FloatField('总花费')
+
+    materials = models.ManyToManyField(Material, through='MaterialInWarehouseInOrderRelationship')
+
+    def __str__(self):
+        return str(self.order) + ' - 与 - ' + str(self.warehouse)
+
+
+class SupplierInOrderRelationship(models.Model):
+    order = models.ForeignKey(MaterialOrder, on_delete=models.CASCADE, verbose_name='订单')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, verbose_name='材料商')
+
+    is_paid = models.BooleanField('已支付')
+    expense = models.FloatField('总花费')
+
+    materials = models.ManyToManyField(Material, through='MaterialInSupplierInOrderRelationship')
+
+    def __str__(self):
+        return str(self.order) + ' - 与 - ' + str(self.supplier)
+
+
+class MaterialInWarehouseInOrderRelationship(models.Model):
+    warehouse_in_order = models.ForeignKey(WarehouseInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单仓库')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    quantity = models.FloatField('数量')
+    price = models.FloatField('单价')
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.warehouse_in_order) + ' - 与 - ' + str(self.material)
+
+
+class MaterialInSupplierInOrderRelationship(models.Model):
+    supplier_in_order = models.ForeignKey(SupplierInOrderRelationship, on_delete=models.CASCADE, verbose_name='订单材料商')
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, verbose_name='材料')
+    quantity = models.FloatField('数量')
+    price = models.FloatField('单价')
+    remark = models.CharField('备注', max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.supplier_in_order) + ' - 与 - ' + str(self.material)
+
 
 
 class MaterialOrderDemandItem(models.Model):

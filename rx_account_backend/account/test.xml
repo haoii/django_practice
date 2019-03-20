@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+ <serialDevice serialDevice="2"/>
+ <motorMaxPps motorMaxPps="200000"/>
+ <angleMutationThreshold angleMutationThreshold="100"/>
+ <openGunDelay openGunDelay="100"/>
+ <closeGunDelay closeGunDelay="1"/>
+ <transSpeed transSpeed="50"/>
+ <calibratingPoints calibratingPoints="200"/>
+ <transPointRatio transPointRatio="1000"/>
+ <limitPos>
+  <item0 item0="90"/>
+  <item1 item1="90"/>
+  <item2 item2="10000"/>
+  <item3 item3="100000"/>
+  <item4 item4="100000"/>
+  <item5 item5="100000"/>
+ </limitPos>
+ <limitNeg>
+  <item0 item0="-2"/>
+  <item1 item1="-2"/>
+  <item2 item2="-10000"/>
+  <item3 item3="100000"/>
+  <item4 item4="100000"/>
+  <item5 item5="100000"/>
+ </limitNeg>
+ <motorRatio>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1"/>
+  <item3 item3="100"/>
+  <item4 item4="100"/>
+  <item5 item5="100"/>
+ </motorRatio>
+ <motorSubdivision>
+  <item0 item0="10000"/>
+  <item1 item1="10000"/>
+  <item2 item2="10000"/>
+  <item3 item3="1000"/>
+  <item4 item4="1000"/>
+  <item5 item5="1000"/>
+ </motorSubdivision>
+ <encoderRatio>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1.5"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </encoderRatio>
+ <encoderSubdivision>
+  <item0 item0="10000"/>
+  <item1 item1="10000"/>
+  <item2 item2="10000"/>
+  <item3 item3="10000"/>
+  <item4 item4="10000"/>
+  <item5 item5="10000"/>
+ </encoderSubdivision>
+ <pulseFilter>
+  <item0 item0="500"/>
+  <item1 item1="500"/>
+  <item2 item2="500"/>
+  <item3 item3="500"/>
+  <item4 item4="500"/>
+  <item5 item5="500"/>
+ </pulseFilter>
+ <speedLimit>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </speedLimit>
+ <motorAcceleration>
+  <item0 item0="0.01"/>
+  <item1 item1="0.01"/>
+  <item2 item2="0.01"/>
+  <item3 item3="0.01"/>
+  <item4 item4="0.01"/>
+  <item5 item5="0.01"/>
+ </motorAcceleration>
+ <singleAxisBtnRatio>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </singleAxisBtnRatio>
+ <singleAxisSliderRatio>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </singleAxisSliderRatio>
+ <maxMonitorDiffTheta>
+  <item0 item0="10"/>
+  <item1 item1="10"/>
+  <item2 item2="10"/>
+  <item3 item3="10"/>
+  <item4 item4="10"/>
+  <item5 item5="10"/>
+ </maxMonitorDiffTheta>
+ <manualSpeedRatio>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </manualSpeedRatio>
+ <kp>
+  <item0 item0="0.2"/>
+  <item1 item1="0.2"/>
+  <item2 item2="0.2"/>
+  <item3 item3="0.1"/>
+  <item4 item4="0.1"/>
+  <item5 item5="0.1"/>
+ </kp>
+ <ki>
+  <item0 item0="1e-008"/>
+  <item1 item1="1e-008"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </ki>
+ <kd>
+  <item0 item0="0.4"/>
+  <item1 item1="0.4"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </kd>
+ <kf>
+  <item0 item0="0"/>
+  <item1 item1="0"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </kf>
+ <kp_work>
+  <item0 item0="0.15"/>
+  <item1 item1="0.15"/>
+  <item2 item2="0"/>
+  <item3 item3="0.1"/>
+  <item4 item4="0.1"/>
+  <item5 item5="0.1"/>
+ </kp_work>
+ <ki_work>
+  <item0 item0="1e-007"/>
+  <item1 item1="1e-007"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </ki_work>
+ <kd_work>
+  <item0 item0="0.55"/>
+  <item1 item1="0.55"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </kd_work>
+ <kf_work>
+  <item0 item0="0.2"/>
+  <item1 item1="0.2"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </kf_work>
+ <normalPassword normalPassword="1"/>
+ <rootPassword rootPassword="2"/>
+ <defaultFile defaultFile="C:/PEDAL_UI_API_TEST.txt"/>
+ <filePathError filePathError=""/>
+ <pausedPosition>
+  <item0 item0="0"/>
+  <item1 item1="0"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </pausedPosition>
+ <pausedNo pausedNo="0"/>
+ <pausedSectionSNo pausedSectionSNo="0"/>
+ <pausedArcPoints pausedArcPoints="0"/>
+ <pausedInterPoints pausedInterPoints="0"/>
+ <pausedEllipsePoints pausedEllipsePoints="0"/>
+ <intersection_std_theta intersection_std_theta="0"/>
+ <isErrorEverOccur isErrorEverOccur="0"/>
+ <isWelding isWelding="0"/>
+ <N1_7or5_ratio N1_7or5_ratio="0.2"/>
+ <N2_7or5_ratio N2_7or5_ratio="0"/>
+ <N4_7or5_ratio N4_7or5_ratio="1"/>
+ <N6_7or5_ratio N6_7or5_ratio="0"/>
+ <N7_7or5_ratio N7_7or5_ratio="0.2"/>
+ <goHomeLimit>
+  <item0 item0="100000"/>
+  <item1 item1="100000"/>
+  <item2 item2="100"/>
+  <item3 item3="100"/>
+  <item4 item4="100"/>
+  <item5 item5="100"/>
+ </goHomeLimit>
+ <homeAngle>
+  <item0 item0="0"/>
+  <item1 item1="0"/>
+  <item2 item2="0"/>
+  <item3 item3="0"/>
+  <item4 item4="0"/>
+  <item5 item5="0"/>
+ </homeAngle>
+ <goHomeHighSpeed>
+  <item0 item0="1.8"/>
+  <item1 item1="1.8"/>
+  <item2 item2="0.5"/>
+  <item3 item3="0.5"/>
+  <item4 item4="0.5"/>
+  <item5 item5="0.5"/>
+ </goHomeHighSpeed>
+ <goHomeLowSpeed>
+  <item0 item0="0.2"/>
+  <item1 item1="0.2"/>
+  <item2 item2="0.5"/>
+  <item3 item3="0.1"/>
+  <item4 item4="0.1"/>
+  <item5 item5="0.1"/>
+ </goHomeLowSpeed>
+ <singleAbsValue>
+  <item0 item0="10"/>
+  <item1 item1="10"/>
+  <item2 item2="10"/>
+  <item3 item3="10"/>
+  <item4 item4="10"/>
+  <item5 item5="10"/>
+ </singleAbsValue>
+ <multiAbsValue>
+  <item0 item0="100"/>
+  <item1 item1="100"/>
+  <item2 item2="100"/>
+  <item3 item3="100"/>
+  <item4 item4="100"/>
+  <item5 item5="100"/>
+ </multiAbsValue>
+ <motorPort>
+  <item0 item0="0"/>
+  <item1 item1="1"/>
+  <item2 item2="2"/>
+  <item3 item3="3"/>
+  <item4 item4="4"/>
+  <item5 item5="5"/>
+ </motorPort>
+ <encoderPort>
+  <item0 item0="0"/>
+  <item1 item1="1"/>
+  <item2 item2="2"/>
+  <item3 item3="3"/>
+  <item4 item4="4"/>
+  <item5 item5="5"/>
+ </encoderPort>
+ <optSwitchPort>
+  <item0 item0="0"/>
+  <item1 item1="1"/>
+  <item2 item2="2"/>
+  <item3 item3="3"/>
+  <item4 item4="4"/>
+  <item5 item5="5"/>
+ </optSwitchPort>
+ <motorDirection>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="-1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </motorDirection>
+ <encoderDirection>
+  <item0 item0="1"/>
+  <item1 item1="1"/>
+  <item2 item2="-1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </encoderDirection>
+ <goHomeDirection>
+  <item0 item0="-1"/>
+  <item1 item1="-1"/>
+  <item2 item2="-1"/>
+  <item3 item3="1"/>
+  <item4 item4="1"/>
+  <item5 item5="1"/>
+ </goHomeDirection>
+ <errorLimitTrans>
+  <item0 item0="50"/>
+  <item1 item1="50"/>
+  <item2 item2="1000"/>
+  <item3 item3="10"/>
+  <item4 item4="10"/>
+  <item5 item5="10"/>
+ </errorLimitTrans>
+ <errorLimitWork>
+  <item0 item0="50"/>
+  <item1 item1="50"/>
+  <item2 item2="1000"/>
+  <item3 item3="10"/>
+  <item4 item4="10"/>
+  <item5 item5="10"/>
+ </errorLimitWork>
+ <machineParam>
+  <item0 item0="8"/>
+  <item1 item1="2"/>
+  <item2 item2="10"/>
+  <item3 item3="24"/>
+  <item4 item4="0.2"/>
+  <item5 item5="10"/>
+  <item6 item6="0"/>
+  <item7 item7="10"/>
+  <item8 item8="10"/>
+  <item9 item9="10"/>
+  <item10 item10="10"/>
+  <item11 item11="10"/>
+  <item12 item12="10"/>
+  <item13 item13="10"/>
+  <item14 item14="10"/>
+  <item15 item15="10"/>
+  <item16 item16="10"/>
+  <item17 item17="10"/>
+  <item18 item18="10"/>
+  <item19 item19="10"/>
+  <item20 item20="10"/>
+ </machineParam>
+ <reservedParam>
+  <item0 item0="10"/>
+  <item1 item1="10"/>
+  <item2 item2="10"/>
+  <item3 item3="10"/>
+  <item4 item4="10"/>
+  <item5 item5="10"/>
+  <item6 item6="10"/>
+  <item7 item7="10"/>
+  <item8 item8="10"/>
+  <item9 item9="10"/>
+  <item10 item10="10"/>
+  <item11 item11="10"/>
+  <item12 item12="10"/>
+  <item13 item13="10"/>
+  <item14 item14="10"/>
+  <item15 item15="10"/>
+  <item16 item16="10"/>
+  <item17 item17="10"/>
+  <item18 item18="10"/>
+  <item19 item19="10"/>
+  <item20 item20="10"/>
+  <item21 item21="10"/>
+  <item22 item22="10"/>
+  <item23 item23="10"/>
+  <item24 item24="10"/>
+  <item25 item25="10"/>
+  <item26 item26="10"/>
+  <item27 item27="10"/>
+  <item28 item28="10"/>
+  <item29 item29="10"/>
+  <item30 item30="10"/>
+  <item31 item31="10"/>
+  <item32 item32="10"/>
+  <item33 item33="10"/>
+  <item34 item34="10"/>
+  <item35 item35="10"/>
+  <item36 item36="10"/>
+  <item37 item37="10"/>
+  <item38 item38="10"/>
+  <item39 item39="10"/>
+  <item40 item40="10"/>
+  <item41 item41="10"/>
+  <item42 item42="10"/>
+  <item43 item43="10"/>
+  <item44 item44="10"/>
+  <item45 item45="10"/>
+  <item46 item46="10"/>
+  <item47 item47="10"/>
+  <item48 item48="10"/>
+  <item49 item49="10"/>
+ </reservedParam>
+ <forceValueThres forceValueThres="0.048828125"/>
+ <balanceForce balanceForce="0"/>
+ <deathOpenValue>
+  <item0 item0="0"/>
+  <item1 item1="0"/>
+ </deathOpenValue>
+ <pedalPositionLimit>
+  <item0 item0="80"/>
+  <item1 item1="80"/>
+ </pedalPositionLimit>
+ <brakeThetaAfterGoHome brakeThetaAfterGoHome="80"/>
+ <getSpeedMethod getSpeedMethod="1"/>
+ <calcSpeedErrorMethod calcSpeedErrorMethod="1"/>
+ <ADCalibrateK ADCalibrateK="10.2"/>
+ <pulseSpeedCalibrateMethod pulseSpeedCalibrateMethod="1"/>
+ <pulseCalibrateFrequency pulseCalibrateFrequency="36230"/>
+ <pulseCalibrateSpeed pulseCalibrateSpeed="100"/>
+ <pulseCounterSwitchSpeed pulseCounterSwitchSpeed="5"/>
+ <pedalRobotUsage pedalRobotUsage="1"/>
+ <defaultCarTypeFile defaultCarTypeFile="C:/Users/Lab/Documents/PedalRobot/parameter_files/11"/>
+ <sysControlParams>
+  <item0 item0="1.11"/>
+  <item1 item1="2.22"/>
+  <item2 item2="3.33"/>
+  <item3 item3="4.44"/>
+  <item4 item4="5.55"/>
+  <item5 item5="6.66"/>
+  <item6 item6="7.77"/>
+ </sysControlParams>
+ <sysControlParamsWltc>
+  <item0 item0="0.11"/>
+  <item1 item1="0.22"/>
+  <item2 item2="0.33"/>
+  <item3 item3="0.44"/>
+  <item4 item4="0.55"/>
+  <item5 item5="0.66"/>
+  <item6 item6="0.77"/>
+ </sysControlParamsWltc>
+ <pedalStartTimeS pedalStartTimeS="0"/>
+ <wsServerIP wsServerIP="192.168.1.115"/>
+ <wsGroupId wsGroupId="Lab1005Group"/>
+ <wsPassword wsPassword="Lab1005GroupPassword"/>
+ <wsRsaPublicKeyFilePath wsRsaPublicKeyFilePath="E:/OpenSSL-Win32/bin/RSA/test_pub.key"/>
+ <wsCmtRole wsCmtRole="0"/>
+</Settings>
