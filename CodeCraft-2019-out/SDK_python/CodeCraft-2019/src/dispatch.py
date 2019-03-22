@@ -84,11 +84,23 @@ class Dispatcher:
             if r.both_way:
                 graph.add_edge(DirectedEdge(r.end, r.start, r.id, r.length, r.max_v))
 
+        # paths = []
+        # for c in self.cars:
+        #     sp = DijkstraSP(graph, c.start, c.max_v)
+        #     path = sp.path_to(c.end)
+        #     paths.append('(' + str(c.id) + ',' + str(c.planned_time) + ',' + ','.join([str(p.id) for p in path]) + ')')
+
         paths = []
-        for c in self.cars:
-            sp = DijkstraSP(graph, c.start, c.max_v)
-            path = sp.path_to(c.end)
-            paths.append('(' + str(c.id) + ',' + str(c.planned_time) + ',' + ','.join([str(p.id) for p in path]) + ')')
+        t = 0
+        while self.cars:
+            t += 1
+            for c in self.cars:
+                if c.planned_time <= t:
+                    sp = DijkstraSP(graph, c.start, c.max_v)
+                    path = sp.path_to(c.end)
+                    paths.append('(' + str(c.id) + ',' + str(t) + ',' + ','.join([str(p.id) for p in path]) + ')')
+                    self.cars.remove(c)
+                    break
 
         with open(answer_path, 'w') as f:
             f.writelines('\n'.join(paths))
