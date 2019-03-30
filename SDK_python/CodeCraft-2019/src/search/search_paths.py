@@ -40,11 +40,11 @@ class Searcher:
         self.all_data.cars.clear()
 
     def get_max_start_num(self):
-        return int(self.all_data.total_road_pos * 0.28) - len(self.all_data.cars_run)
+        return int(self.all_data.total_road_pos * 0.3) - len(self.all_data.cars_run)
 
     def search(self, t):
         start_num = 0
-        max_start_num = min(35, self.get_max_start_num())
+        max_start_num = min(40, self.get_max_start_num())
         # if 50 < t < 200:
         #     max_start_num = 30
         start_ids = []

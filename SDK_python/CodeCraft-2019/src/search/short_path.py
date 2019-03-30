@@ -34,9 +34,9 @@ class DirectedEdge(object):
         if fill_rate < 0.3:
             return duration0
         elif fill_rate < 0.6:
-            return ((fill_rate - 0.3) * 2 + 1) * duration0
+            return ((fill_rate - 0.3) * 1.8 + 1) * duration0
         else:
-            return ((fill_rate - 0.6) * 5 + 1.6) * duration0
+            return ((fill_rate - 0.6) * 4.4 + 1.54) * duration0
 
         # if fill_rate < 0.3:
         #     return int(duration0) + 1
