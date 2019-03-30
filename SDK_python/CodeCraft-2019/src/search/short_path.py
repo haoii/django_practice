@@ -180,7 +180,8 @@ class DijkstraSP:
         #
         # return reversed(path), path_dict
 
-        return path[-1].half_road
+        # return path[-1].half_road
+        return [p.half_road for p in reversed(path)]
 
     def get_path(self, vertex):
         if not self.has_path_to(vertex):

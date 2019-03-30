@@ -57,16 +57,14 @@ class Searcher:
                 sp = DijkstraSP(self.all_data.graph, car.start, car.end, car.max_v)
                 new_r = sp.path_to(car.end)
 
-                if new_r.get_fill_rate() > 0.3:
+                if new_r[0].get_fill_rate() > 0.3:
                     continue
 
-                car.path = [new_r]
+                car.path = new_r[:2]
 
                 car.start_t = t
-                car.last_r = new_r
-                if new_r.end == car.end:
+                if car.path[-1].end == car.end:
                     car.path.append('end')
-                    car.last_r = 'complete'
 
                 start_ids.append(key)
 
@@ -83,16 +81,14 @@ class Searcher:
             del self.all_data.cars[key]
 
         for _, car in self.all_data.cars_run.items():
-            if car.path[car.cur_pos] == car.last_r:
-                car.last_r.hide_reverse_half_road()
-                sp = DijkstraSP(self.all_data.graph, car.last_r.end, car.end, car.max_v)
-                car.last_r.show_reverse_half_road()
+            if car.path[-1] != 'end' and car.cur_pos == len(car.path) - 1:
+                car.path[-1].hide_reverse_half_road()
+                sp = DijkstraSP(self.all_data.graph, car.path[-1].end, car.end, car.max_v)
+                car.path[-1].show_reverse_half_road()
                 new_r = sp.path_to(car.end)
 
-                car.path.append(new_r)
-                car.last_r = new_r
-                if new_r.end == car.end:
+                car.path += new_r[:4]
+                if car.path[-1].end == car.end:
                     car.path.append('end')
-                    car.last_r = 'complete'
 
 
