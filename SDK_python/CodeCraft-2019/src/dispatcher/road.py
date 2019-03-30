@@ -26,6 +26,7 @@ class HalfRoad:
 
         self.jam_num = 0
         self.use_degree = 0
+        self.total_pos = self.lane_num * self.length
 
     def hide_reverse_half_road(self):
         reverse_half_road = self.get_reverse_half_road()
@@ -47,8 +48,7 @@ class HalfRoad:
             return self.road.half_roads[0]
 
     def get_fill_rate(self):
-        rate = self.car_num / (self.lane_num * self.length)
-        return rate
+        return self.car_num / self.total_pos
 
     # def get_fill_rate(self):
     #     # rate = self.car_num / (self.lane_num * self.length)
