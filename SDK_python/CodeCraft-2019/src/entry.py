@@ -113,11 +113,11 @@ def entry(car_path, road_path, cross_path, answer_path):
         searcher.search(t)
         dispatch_turns = dispatcher.dispatch(t)
 
-        print('time:{} complete:{} run:{} total:{} dispatch_turns:{}'.format(
-            t, len(all_data.cars_complete), len(all_data.cars_run),
-            all_data.total_car_num, dispatch_turns))
-
-    print('调度时间：', t)
+    #     print('time:{} complete:{} run:{} total:{} dispatch_turns:{}'.format(
+    #         t, len(all_data.cars_complete), len(all_data.cars_run),
+    #         all_data.total_car_num, dispatch_turns))
+    #
+    # print('调度时间：', t)
     # for _, c in cars_complete.items():
     #     print(c.path)
 

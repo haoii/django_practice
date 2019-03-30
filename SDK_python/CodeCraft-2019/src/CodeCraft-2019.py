@@ -32,20 +32,7 @@ def main():
     logging.info("cross_path is %s" % (cross_path))
     logging.info("answer_path is %s" % (answer_path))
 
-    # entry(car_path, road_path, cross_path, answer_path)
-
-    with open(car_path) as f:
-        cars = f.readlines()
-        if cars[1][1] == '2':
-            answer_pos = 'src/answer-e1.txt'
-        else:
-            answer_pos = 'src/answer-e2.txt'
-    # print(answer_pos)
-
-    with open(answer_pos) as f:
-        answers = f.readlines()
-    with open(answer_path, 'w') as f:
-        f.writelines(answers)
+    entry(car_path, road_path, cross_path, answer_path)
 
 
 if __name__ == "__main__":
