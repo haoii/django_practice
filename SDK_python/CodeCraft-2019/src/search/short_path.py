@@ -8,11 +8,12 @@ INFINITE_NEGATIVE_NUMBER = float('-inf')
 
 class DirectedEdge(object):
 
-    def __init__(self, start, end, id, half_road):
+    def __init__(self, start, end, id, half_road, running_pace):
         self.start = start
         self.end = end
         self.id = id
         self.half_road = half_road
+        self.running_pace = running_pace
 
     def weight(self, v):
         if self.half_road.tmp_hide:
@@ -31,12 +32,20 @@ class DirectedEdge(object):
 
         # duration0 *= use_degree + 1
 
-        if fill_rate < 0.3:
-            return duration0
-        elif fill_rate < 0.6:
-            return ((fill_rate - 0.3) * 1.8 + 1) * duration0
+        if self.running_pace < 12:
+            if fill_rate < 0.3:
+                return duration0
+            elif fill_rate < 0.6:
+                return ((fill_rate - 0.3) * 1.8 + 1) * duration0
+            else:
+                return ((fill_rate - 0.6) * 44 + 1.54) * duration0
         else:
-            return ((fill_rate - 0.6) * 4.4 + 1.54) * duration0
+            if fill_rate < 0.3:
+                return duration0
+            elif fill_rate < 0.6:
+                return ((fill_rate - 0.3) * 2 + 1) * duration0
+            else:
+                return ((fill_rate - 0.6) * 5 + 1.6) * duration0
 
         # if fill_rate < 0.3:
         #     return int(duration0) + 1

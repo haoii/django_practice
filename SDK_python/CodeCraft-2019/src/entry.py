@@ -50,12 +50,13 @@ class AllData:
         self.cars_to_run = {}
         self.cars_run = {}
         self.cars_complete = {}
+        self.running_pace = self.cars[20001].max_v
 
         self.graph = EdgeWeightedDigraph()
         for _, r in self.roads.items():
-            self.graph.add_edge(DirectedEdge(r.start, r.end, r.id, r.half_roads[0]))
+            self.graph.add_edge(DirectedEdge(r.start, r.end, r.id, r.half_roads[0], self.running_pace))
             if r.both_way:
-                self.graph.add_edge(DirectedEdge(r.end, r.start, r.id, r.half_roads[1]))
+                self.graph.add_edge(DirectedEdge(r.end, r.start, r.id, r.half_roads[1], self.running_pace))
 
         self.total_car_num = len(self.cars)
         self.total_road_pos = 0
