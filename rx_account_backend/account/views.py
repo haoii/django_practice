@@ -44,10 +44,10 @@ def customers(request):
             'total_price': customer.total_price,
             'price_discount': customer.price_discount,
             'price_received': customer.price_received,
-            # 'total_expense': customers_total_expense[customer.address] if customer.address in customers_total_expense else 0,
+            'total_expense': customers_total_expense[customer.address] if customer.address in customers_total_expense else 0,
             # 'expense_paid': customers_expense_paid[customer.address] if customer.address in customers_expense_paid else 0,
-            'total_expense': 0,
-            'price_received': 0,
+            # 'total_expense': 0,
+            'expense_paid': 0,
         }
 
     # total_expense = MaterialOrderItem.objects.values('customer__address').annotate(
@@ -61,6 +61,15 @@ def customers(request):
     # customers_expense_paid = {}
     # for i in expense_paid:
     #     customers_expense_paid[i['customer__address']] = i['total']
+
+    materials_in_customer = MaterialInCustomerInOrderRelationship.objects.all()
+    customers_total_expense = {}
+    for i in materials_in_customer:
+        address = i.customer_in_order.customer.address
+        if address in customers_total_expense:
+            customers_total_expense[address] += i.quantity * i.material_in_order.expense / i.material_in_order.quantity
+        else:
+            customers_total_expense[address] = i.quantity * i.material_in_order.expense / i.material_in_order.quantity
 
     latest_customers = Customer.objects.order_by('-sign_date')[:40]
     latest_customers = [customer_to_dict(c) for c in latest_customers]
@@ -555,14 +564,23 @@ def add_material_order(request):
     new_order = MaterialOrder(order_date=order_date, clerk='郝高峰', remark=remark)
     new_order.save()
 
+    # for material, material_demand in material_demand_sum.items():
+    #     for purchase_item in material_demand['purchase_items']:
+    #         if purchase_item['type'] == 'warehouse' or from_paid[purchase_item['from']]:
+    #             purchase_item['is_paid'] = True
+    #             if 'expense_paid' in material_demand:
+    #                 material_demand['expense_paid'] += purchase_item['price'] * purchase_item['quantity']
+    #             else:
+    #                 material_demand['expense_paid'] = purchase_item['price'] * purchase_item['quantity']
+    #         else:
+    #             purchase_item['is_paid'] = False
+
     for material, material_demand in material_demand_sum.items():
+        material_demand['expense_paid'] = 0
         for purchase_item in material_demand['purchase_items']:
             if purchase_item['type'] == 'warehouse' or from_paid[purchase_item['from']]:
                 purchase_item['is_paid'] = True
-                if 'expense_paid' in material_demand:
-                    material_demand['expense_paid'] += purchase_item['price'] * purchase_item['quantity']
-                else:
-                    material_demand['expense_paid'] = purchase_item['price'] * purchase_item['quantity']
+                material_demand['expense_paid'] += purchase_item['price'] * purchase_item['quantity']
             else:
                 purchase_item['is_paid'] = False
 
